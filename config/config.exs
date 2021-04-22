@@ -23,6 +23,11 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Configures Guardian
+config :banking, BankingWeb.Guardian,
+  issuer: "banking",
+  secret_key: "JW1haa1wBoL7MGqOJrzBP9LKbU5sikJtvdRJpjw+RF/DMP4EltvRJEjrAgi+geua"
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
