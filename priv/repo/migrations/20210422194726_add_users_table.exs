@@ -7,7 +7,7 @@ defmodule Banking.Repo.Migrations.AddUsersTable do
       add(:password, :string)
       add(:email, :string)
       add(:balance, :float)
-      
+
       timestamps(inserted_at: :created_at)
     end
 
@@ -17,5 +17,4 @@ defmodule Banking.Repo.Migrations.AddUsersTable do
   def down do
     drop table(:users)
   end
-
 end
