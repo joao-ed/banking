@@ -9,8 +9,10 @@ defmodule BankingWeb.AccountController do
         |> put_status(:created)
         |> text("User created!")
 
-      {:error, changeset} ->
-        render(conn, BankingWeb.ChangesetView, "error.json", changeset: changeset)
+      {:error, changeset} -> 
+        conn
+        |> put_status(:bad_request)
+        |> render(BankingWeb.ChangesetView, "error.json", changeset: changeset)
     end
   end
 end
