@@ -5,7 +5,7 @@ defmodule Banking.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required_fields ~w(email name password balance)a
+  @required_fields ~w(email username password balance)a
 
   schema "users" do
     field(:email, :string, unique: true)
@@ -13,13 +13,14 @@ defmodule Banking.User do
     field(:username, :string, unique: true)
     field(:balance, :float, default: 1.000)
 
-    has_many(:transfer, Banking.Transfer)
+    # has_many(:transfer, Banking.Transfer)
 
     timestamps(inserted_at: :created_at)
   end
 
   def changeset(user, attrs) do
     user
+    |> cast(attrs, @required_fields)
     |> validate_required(@required_fields)
     |> unique_constraint(:email)
   end
