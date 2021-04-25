@@ -22,6 +22,9 @@ defmodule Banking.User do
     user
     |> cast(attrs, @required_fields)
     |> validate_required(@required_fields)
+    |> validate_length(:password, min: 8)
+    # A rudmentary email validation. improve it!
+    |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
   end
 end
