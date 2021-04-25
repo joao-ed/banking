@@ -7,12 +7,17 @@ defmodule BankingWeb.SessionController do
   def create(conn, params) do
     case Auth.find_user_and_check_password(params) do
       {:ok, user} ->
-        json(conn, %{ok: "authenticated!"})
+        {:ok, jwt, _full_claims} =
+          user |> BankingWeb.Guardian.encode_and_sign(%{}, token_type: :token)
+
+        conn
+        |> put_status(:created)
+        |> render("login.json", jwt: jwt)
 
       {:error, message} ->
         conn
         |> put_status(:unauthorized)
-        |> render(BankingWeb.UserView, "error.json", message: message)
+        |> render("error.json", message: message)
     end
   end
 end
