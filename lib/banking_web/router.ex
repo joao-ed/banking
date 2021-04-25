@@ -9,7 +9,7 @@ defmodule BankingWeb.Router do
     pipe_through :api
 
     post("/accounts", AccountController, :create)
-    post("/signin", SessionController, :index)
+    post("/signin", SessionController, :create)
     resources("/transfers", TransfersController, only: [:index, :create])
     post("/withdraw", WithdrawController, :create)
   end
