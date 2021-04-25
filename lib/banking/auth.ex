@@ -12,8 +12,9 @@ defmodule Banking.Auth do
   def find_user_and_check_password(%{"email" => email, "password" => password}) do
     user = Repo.get_by(User, email: String.downcase(email))
     IO.inspect(check_password(user, password))
+
     case check_password(user, password) do
-      {:ok, user} -> {:ok, user} 
+      {:ok, user} -> {:ok, user}
       {:error, message} -> {:error, message}
       _ -> {:error, "Could not login. Check your credentials and try again"}
     end
