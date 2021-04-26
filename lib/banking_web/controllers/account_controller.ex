@@ -6,7 +6,7 @@ defmodule BankingWeb.AccountController do
 
   def create(conn, params) do
     case Auth.register(params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> put_status(:created)
         |> text("User created!")
