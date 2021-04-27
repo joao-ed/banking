@@ -10,8 +10,13 @@ defmodule BankingWeb.WithdrawController do
 
   def withdraw(conn, %{"amount" => amount}, user) do
     case Withdraw.validate_and_withdraw(user, amount) do
-      {:ok, message} -> render(conn, "index.json", %{message: message})
-      {:error, message} -> render(conn, "error.json", %{message: message})
+      {:ok, message} ->
+        render(conn, "index.json", %{message: message})
+
+      {:error, message} ->
+        conn
+        |> put_status(:bad_request)
+        |> render("error.json", %{message: message})
     end
   end
 end
