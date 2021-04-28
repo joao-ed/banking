@@ -3,7 +3,9 @@ defmodule BankingWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
 
+  pipeline :auth do
     plug(
       Guardian.Plug.Pipeline,
       error_handler: BankingWeb.SessionController,
@@ -16,10 +18,13 @@ defmodule BankingWeb.Router do
 
   scope "/api", BankingWeb do
     pipe_through :api
-
-    post("/accounts", AccountController, :create)
     post("/signin", SessionController, :create)
-    resources("/transfers", TransfersController, only: [:index, :create])
-    post("/withdraw", WithdrawController, :withdraw)
+    post("/accounts", UserController, :create)
+  end
+
+  scope "/api/accounts", BankingWeb do
+    pipe_through [:api, :auth]
+    resources("/transfers", AccountController, only: [:index, :create])
+    post("/withdraw", AccountController, :withdraw)
   end
 end

@@ -10,7 +10,11 @@ defmodule BankingWeb.ChangesetView do
     Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
   end
 
-  def render("error.json", %{changeset: changeset}) do
+  def render("error.json", %{changeset: changeset}) when is_map(changeset) do
     %{errors: translate_errors(changeset)}
+  end
+
+  def render("error.json", %{changeset: changeset}) when is_binary(changeset) do
+    %{errors: changeset}
   end
 end

@@ -1,7 +1,8 @@
 defmodule BankingWeb.Guardian do
   use Guardian, otp_app: :banking
 
-  alias Banking.{Repo, User}
+  alias Banking.Repo
+  alias Banking.Accounts.User
 
   def subject_for_token(%User{} = user, _claims), do: {:ok, to_string(user.id)}
   def subject_for_token(_, _), do: {:error, "Unknown resource type"}

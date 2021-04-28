@@ -1,15 +1,17 @@
 defmodule BankingWeb.AccountController do
   use BankingWeb, :controller
-  alias Banking.Auth
+  use BankingWeb.GuardedController
 
-  action_fallback(BankingWeb.FallbackController)
+  alias Banking.Accounts
 
-  def create(conn, params) do
-    case Auth.register(params) do
-      {:ok, _user} ->
+  action_fallback BankingWeb.FallbackController
+
+  def withdraw(conn, %{"amount" => amount}, current_user) do
+    case Accounts.validate_and_withdraw(current_user, amount) do
+      {:ok, account} ->
         conn
         |> put_status(:created)
-        |> text("User created!")
+        |> render("withdraw.json", account: account)
 
       {:error, changeset} ->
         conn

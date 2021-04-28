@@ -6,7 +6,7 @@ defmodule Banking.Auth do
   import Ecto.{Query, Changeset}, warn: false
 
   alias Banking.Repo
-  alias Banking.User
+  alias Banking.Accounts.User
   alias Banking.Encryption
 
   def find_user_and_check_password(%{"email" => email, "password" => password}) do
@@ -17,14 +17,6 @@ defmodule Banking.Auth do
       {:error, message} -> {:error, message}
       _ -> {:error, "Could not login. Check your credentials and try again"}
     end
-  end
-
-  def register(attrs \\ %{}) do
-    # let's read about struct (a specialized way of map ?)
-    %User{}
-    |> User.changeset(attrs)
-    |> hash_password
-    |> Repo.insert()
   end
 
   defp check_password(user, password) do
