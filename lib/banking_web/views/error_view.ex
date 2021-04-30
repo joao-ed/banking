@@ -9,7 +9,7 @@ defmodule BankingWeb.ErrorView do
     %{errors: %{detail: "Internal server error"}}
   end
 
-  def render("403.json", _assigns) do
+  def render("401.json", _assigns) do
     %{errors: %{detail: "Unauthorized"}}
   end
 
