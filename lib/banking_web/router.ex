@@ -18,13 +18,14 @@ defmodule BankingWeb.Router do
 
   scope "/api", BankingWeb do
     pipe_through :api
-    post("/signin", SessionController, :create)
-    post("/accounts", UserController, :create)
+    post "/signin", SessionController, :create
+    post "/accounts", UserController, :create
   end
 
   scope "/api/accounts", BankingWeb do
     pipe_through [:api, :auth]
-    resources("/transfers", AccountController, only: [:index, :create])
-    post("/withdraw", AccountController, :withdraw)
+    get "/transfers", AccountController, :index
+    post "/transfers", AccountController, :create_transfer
+    post "/withdraw", AccountController, :withdraw
   end
 end

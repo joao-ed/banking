@@ -8,4 +8,13 @@ defmodule BankingWeb.AccountView do
   def render("withdraw.json", %{account: account}) do
     %{balance: account.balance}
   end
+
+  def render("transfers.json", %{
+        from: from,
+        to: to,
+        amount: amount,
+        balance: balance
+      }) do
+    %{from: from, to: to, amount: amount, balance: balance}
+  end
 end
