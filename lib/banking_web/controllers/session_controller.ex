@@ -5,15 +5,12 @@ defmodule BankingWeb.SessionController do
   action_fallback(BankingWeb.FallbackController)
 
   def create(conn, params) do
-    case Auth.find_user_and_check_password(params) do
-      {:ok, user} ->
-        {:ok, jwt, _full_claims} =
-          user |> BankingWeb.Guardian.encode_and_sign(%{}, token_type: :bearer)
-
-        conn
-        |> put_status(:created)
-        |> render("login.json", jwt: jwt)
-
+    with {:ok, user} <- Auth.find_user_and_check_password(params),
+         {:ok, jwt, _full_claims} <- user |> BankingWeb.Guardian.encode_and_sign(%{}) do
+      conn
+      |> put_status(:created)
+      |> render("login.json", jwt: jwt)
+    else
       {:error, message} ->
         conn
         |> put_status(:unauthorized)
