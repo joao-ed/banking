@@ -1,11 +1,10 @@
-use Mix.Config
-
+import Config
 # Configure your database
 config :banking, Banking.Repo,
-  username: System.get_env("USER"),
-  password: System.get_env("PASSWORD"),
-  database: System.get_env("DATABASE"),
-  hostname: System.get_env("HOSTNAME"),
+  username: System.get_env("PG_USER") || "postgres",
+  password: System.get_env("PG_PASSWORD") || "postgres",
+  database: "banking_dev",
+  hostname: System.get_env("PG_HOST") || "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -15,17 +14,6 @@ config :banking, BankingWeb.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: []
-
-# Watch static and templates for browser reloading.
-config :banking, BankingWeb.Endpoint,
-  live_reload: [
-    patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
-      ~r"lib/banking_web/(live|views)/.*(ex)$",
-      ~r"lib/banking_web/templates/.*(eex)$"
-    ]
-  ]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
