@@ -9,12 +9,14 @@ defmodule BankingWeb.UserController do
       {:ok, user} ->
         conn
         |> put_status(:created)
-        |> render(BankingWeb.UserView, "user-created.json", user: user)
+        |> put_view(BankingWeb.UserView)
+        |> render("user-created.json", user: user)
 
       {:error, changeset} ->
         conn
         |> put_status(:bad_request)
-        |> render(BankingWeb.ChangesetView, "error.json", changeset: changeset)
+        |> put_view(BankingWeb.ChangesetView)
+        |> render("error.json", changeset: changeset)
     end
   end
 end
