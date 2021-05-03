@@ -4,8 +4,7 @@ defmodule Banking.Repo.Migrations.AddAccountsTable do
   def up do
     create table(:accounts) do
       add :balance, :integer, null: false
-      add :user_id, references(:users), null: false
-
+      add :user_id, references(:users, on_delete: :delete_all), null: false
       timestamps()
     end
 
