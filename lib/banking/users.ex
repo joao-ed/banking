@@ -1,6 +1,6 @@
 defmodule Banking.Users do
   @moduledoc """
-  Handle with users operations
+  The Users context
   """
 
   alias Ecto.Changeset
@@ -33,8 +33,7 @@ defmodule Banking.Users do
   Find an user and check if the password is correct
   """
   def find_user_and_check_password(%{"email" => email, "password" => password}) do
-    Repo.get_by(User, email: String.downcase(email))
-    |> check_password(password)
+    Repo.get_by(User, email: String.downcase(email)) |> check_password(password)
   end
 
   defp hash_password(changeset) do

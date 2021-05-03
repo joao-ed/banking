@@ -8,4 +8,8 @@ defmodule BankingWeb.SessionView do
   def render("login.json", %{jwt: jwt}) do
     %{token: jwt}
   end
+
+  def render("logout.json", %{message: message}) do
+    %{message: message}
+  end
 end

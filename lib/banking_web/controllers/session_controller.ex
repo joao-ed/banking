@@ -2,7 +2,7 @@ defmodule BankingWeb.SessionController do
   use BankingWeb, :controller
   alias Banking.Users
 
-  action_fallback(BankingWeb.FallbackController)
+  action_fallback BankingWeb.FallbackController
 
   def create(conn, params) do
     with {:ok, user} <- Users.find_user_and_check_password(params),
@@ -20,6 +20,15 @@ defmodule BankingWeb.SessionController do
         conn
         |> put_status(:unauthorized)
         |> render("error.json", message: reason)
+    end
+  end
+
+  def sign_out(conn, _params) do
+    with jwt <- Guardian.Plug.current_token(conn),
+         {:ok, _claims} <- BankingWeb.Guardian.revoke(jwt) do
+      conn
+      |> put_status(:created)
+      |> render("logout.json", message: "successfully logged out")
     end
   end
 

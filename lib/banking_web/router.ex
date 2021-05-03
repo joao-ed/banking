@@ -22,6 +22,11 @@ defmodule BankingWeb.Router do
     post "/accounts", UserController, :create
   end
 
+  scope "/api", BankingWeb do
+    pipe_through [:api, :auth]
+    post "/signout", SessionController, :sign_out
+  end
+
   scope "/api/accounts", BankingWeb do
     pipe_through [:api, :auth]
     get "/transfers", AccountController, :index

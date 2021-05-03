@@ -10,7 +10,7 @@ defmodule BankingWeb.FallbackController do
   def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)
-    |> put_view(BankexWeb.ErrorView)
+    |> put_view(BankingWeb.ErrorView)
     |> render(:"404")
   end
 
