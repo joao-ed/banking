@@ -2,20 +2,28 @@ defmodule Banking.Users do
   @moduledoc """
   Handle with users operations
   """
-  import Ecto.Changeset
 
   alias Ecto.Changeset
-  alias Banking.Accounts.User
+  alias Banking.Accounts.{User, Account}
   alias Banking.Accounts.Account
   alias Banking.Users.Encryption
   alias Banking.Repo
 
   @doc """
   Create a new User with associated account
+
+  ## Examples
+
+      iex> register(%{field: value})
+      {:ok, %User{}}
+
+      iex> register(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
   """
   def register(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+    |> Changeset.cast_assoc(:account, with: &Account.changeset/2)
     |> hash_password()
     |> Changeset.put_assoc(:account, %Account{})
     |> Repo.insert()
@@ -32,7 +40,7 @@ defmodule Banking.Users do
   defp hash_password(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
-        put_change(changeset, :password, Encryption.put_pass_hash(pass).password)
+        Changeset.put_change(changeset, :password, Encryption.put_pass_hash(pass).password)
 
       _ ->
         changeset
