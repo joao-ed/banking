@@ -1,26 +1,32 @@
 defmodule BankingWeb.SessionController do
   use BankingWeb, :controller
-  alias Banking.Auth
+  alias Banking.Users
 
   action_fallback(BankingWeb.FallbackController)
 
   def create(conn, params) do
-    with {:ok, user} <- Auth.find_user_and_check_password(params),
+    with {:ok, user} <- Users.find_user_and_check_password(params),
          {:ok, jwt, _full_claims} <- user |> BankingWeb.Guardian.encode_and_sign(%{}) do
       conn
       |> put_status(:created)
       |> render("login.json", jwt: jwt)
     else
-      {:error, message} ->
+      {:error, :user_not_found} ->
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", message: "User not found. Check your credentials and try again")
+
+      {:error, reason} ->
         conn
         |> put_status(:unauthorized)
-        |> render("error.json", message: message)
+        |> render("error.json", message: reason)
     end
   end
 
   def auth_error(conn, {_type, _reason}, _opts) do
     conn
     |> put_status(:forbidden)
-    |> render(BankingWeb.SessionView, "error.json", message: "Not Authenticated")
+    |> put_view(BankingWeb.SessionView)
+    |> render("error.json", message: "Not Authenticated")
   end
 end
