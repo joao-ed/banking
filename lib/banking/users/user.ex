@@ -1,6 +1,6 @@
 defmodule Banking.Accounts.User do
   @moduledoc """
-  The user model.
+  The User model.
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -19,6 +19,7 @@ defmodule Banking.Accounts.User do
     timestamps()
   end
 
+  @doc false
   def changeset(user, attrs) do
     user
     |> cast(attrs, @required_fields)
