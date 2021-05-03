@@ -1,4 +1,4 @@
-defmodule Banking.Accounts.User do
+defmodule Banking.Users.User do
   @moduledoc """
   The User model.
   """

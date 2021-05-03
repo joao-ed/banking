@@ -8,7 +8,7 @@ defmodule Banking.Repo.Migrations.AddUsersTable do
       add :email, :string
       timestamps()
     end
-    create(unique_index(:users, [:email]))
+    create(unique_index(:users, [:email, :username]))
   end
 
   def down do

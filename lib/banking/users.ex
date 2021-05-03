@@ -4,7 +4,7 @@ defmodule Banking.Users do
   """
 
   alias Ecto.Changeset
-  alias Banking.Accounts.{User, Account}
+  alias Banking.Users.User
   alias Banking.Accounts.Account
   alias Banking.Users.Encryption
   alias Banking.Repo
