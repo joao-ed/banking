@@ -1,6 +1,6 @@
 defmodule Banking.Accounts do
   @moduledoc """
-  The account operations
+  The Accounts context
   """
   alias Banking.Accounts.{Account, User}
   alias Banking.Repo
@@ -62,6 +62,7 @@ defmodule Banking.Accounts do
   defp get_user_by_email(email) do
     User
     |> Repo.get_by(email: email)
+    |> Repo.preload(:account)
   end
 
   defp get_account(user_id), do: Repo.get_by!(Account, user_id: user_id)
