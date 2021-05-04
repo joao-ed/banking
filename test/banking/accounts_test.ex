@@ -25,4 +25,10 @@ defmodule Banking.AccountsTest do
     assert {:ok, %{balance: new_balance}} = Accounts.validate_and_withdraw(user, "100.00")
     assert new_balance === 900_00
   end
+
+  test "validate_and_withdraw/2 with valid amount (decimal)" do
+    user = user_fixture(@user_attrs)
+    assert {:ok, %{balance: new_balance}} = Accounts.validate_and_withdraw(user, "147.37")
+    assert new_balance === 852_63
+  end
 end
