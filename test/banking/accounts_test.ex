@@ -10,14 +10,21 @@ defmodule Banking.AccountsTest do
     user
   end
 
-  test "validate_and_withdraw/2 with invalid amount (zero as binary)" do
-    user = user_fixture(@user_attrs)
-    assert {:error, :invalid_amount} = Accounts.validate_and_withdraw(user, "0")
-  end
+  describe "validate_and_withdraw/2 with invalid amount" do
+    test "(zero as binary)" do
+      user = user_fixture(@user_attrs)
+      assert {:error, :invalid_amount} = Accounts.validate_and_withdraw(user, "0")
+    end
 
-  test "validate_and_withdraw/2 with invalid amount (zero as integer)" do
-    user = user_fixture(@user_attrs)
-    assert {:error, :invalid_amount} = Accounts.validate_and_withdraw(user, 0)
+    test "(negative amount)" do
+      user = user_fixture(@user_attrs)
+      assert {:error, :invalid_amount} = Accounts.validate_and_withdraw(user, "-110.23")
+    end
+
+    test "(zero as integer)" do
+      user = user_fixture(@user_attrs)
+      assert {:error, :invalid_amount} = Accounts.validate_and_withdraw(user, 0)
+    end
   end
 
   test "validate_and_withdraw/2 with valid amount" do
