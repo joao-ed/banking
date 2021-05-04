@@ -3,7 +3,7 @@ defmodule Banking.Accounts.AccountTest do
   alias Banking.Accounts.Account
 
   test "balance must be equal or greater than zero" do
-    changeset = Account.changeset(%Account{}, %{balance: 1})
+    changeset = Account.changeset(%Account{}, %{balance: -1})
     assert %{balance: ["Insufficient funds to perform this operation"]} = errors_on(changeset)
   end
 end
