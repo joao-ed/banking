@@ -43,7 +43,7 @@ defmodule Banking.UsersTest do
              })
   end
 
-  test "find_user_and_check_password/1 with wrong email" do
+  test "find_user_and_check_password/1 with invalid email" do
     _ = user_fixture(@valid_attrs)
 
     assert {:error, :user_not_found} =

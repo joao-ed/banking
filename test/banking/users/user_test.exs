@@ -1,6 +1,6 @@
 defmodule Banking.Users.UserTest do
   use Banking.DataCase, async: true
-  alias Banking.Accounts.User
+  alias Banking.Users.User
 
   test "password must be at least 8 characters long" do
     changeset = User.changeset(%User{}, %{password: "123456"})
