@@ -29,8 +29,7 @@ defmodule Banking.Accounts do
          {:ok, target_user} <- same_user?(user, target_user),
          {:ok, from} <- {:ok, get_account(user.id)},
          {:ok, to} <- {:ok, get_account(target_user.id)} do
-      {:ok, result} = transfer(from, to, value)
-      result
+      transfer(from, to, value)
     end
   end
 
