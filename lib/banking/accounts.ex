@@ -58,6 +58,9 @@ defmodule Banking.Accounts do
 
   defp convert_amount(amount) when is_integer(amount) and amount > 0, do: {:ok, amount}
 
+  defp convert_amount(amount) when is_integer(amount) and amount <= 0,
+    do: {:error, :invalid_amount}
+
   defp get_user_by_email(email) do
     User
     |> Repo.get_by(email: email)
