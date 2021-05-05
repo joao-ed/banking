@@ -2,7 +2,8 @@ defmodule Banking.Accounts do
   @moduledoc """
   The Accounts context
   """
-  alias Banking.Accounts.{Account, User}
+  alias Banking.Accounts.Account
+  alias Banking.Users.User
   alias Banking.Repo
 
   @doc """
@@ -34,10 +35,13 @@ defmodule Banking.Accounts do
   end
 
   defp transfer(%Account{} = from, %Account{} = to, amount) do
-    Repo.transaction(fn ->
-      Repo.update(Account.changeset(to, %{balance: to.balance + amount}))
-      Repo.update(Account.changeset(from, %{balance: from.balance - amount}))
-    end)
+    {:ok, result} =
+      Repo.transaction(fn ->
+        Repo.update(Account.changeset(to, %{balance: to.balance + amount}))
+        Repo.update(Account.changeset(from, %{balance: from.balance - amount}))
+      end)
+
+    result
   end
 
   defp withdraw(%Account{} = account, amount) do

@@ -4,13 +4,13 @@ defmodule Banking.Accounts.Account do
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias Banking.Accounts.User
+  alias Banking.Users.User
 
   @initial_balance 100_000
 
   schema "accounts" do
-    field :balance, :integer, required: true, default: @initial_balance
-    belongs_to :user, User
+    field(:balance, :integer, required: true, default: @initial_balance)
+    belongs_to(:user, User)
     timestamps()
   end
 
