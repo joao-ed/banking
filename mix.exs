@@ -48,7 +48,8 @@ defmodule Banking.MixProject do
       {:guardian, "~> 2.0"},
       {:comeonin, "~> 5.3"},
       {:argon2_elixir, "~> 2.0"},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:pre_commit, "~> 0.3.4", only: :dev}
     ]
   end
 
