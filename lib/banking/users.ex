@@ -2,12 +2,10 @@ defmodule Banking.Users do
   @moduledoc """
   The Users context
   """
-
-  alias Ecto.Changeset
-  alias Banking.Users.User
   alias Banking.Accounts.Account
-  alias Banking.Users.Encryption
   alias Banking.Repo
+  alias Banking.Users.{Encryption, User}
+  alias Ecto.Changeset
 
   @doc """
   Create a new User with associated account

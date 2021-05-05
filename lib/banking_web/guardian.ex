@@ -1,4 +1,7 @@
 defmodule BankingWeb.Guardian do
+  @moduledoc """
+  Guardian "implementation module". A module which includes Guardian's functionality and the code for encondig and decoding token's value
+  """
   use Guardian, otp_app: :banking
 
   alias Banking.Repo

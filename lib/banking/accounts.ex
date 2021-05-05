@@ -3,8 +3,8 @@ defmodule Banking.Accounts do
   The Accounts context
   """
   alias Banking.Accounts.Account
-  alias Banking.Users.User
   alias Banking.Repo
+  alias Banking.Users.User
 
   @doc """
   Validate amount and withdraw money from user account

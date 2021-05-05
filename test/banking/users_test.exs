@@ -1,8 +1,8 @@
 defmodule Banking.UsersTest do
   use Banking.DataCase, async: true
 
-  alias Banking.Users.{User, Encryption}
   alias Banking.Users
+  alias Banking.Users.{Encryption, User}
 
   @valid_attrs %{username: "Rob Halford", email: "rob@fakemail.com", password: "12345678"}
   @invalid_attrs %{username: nil, email: nil, password: "1"}

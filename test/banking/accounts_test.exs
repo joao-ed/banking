@@ -46,13 +46,13 @@ defmodule Banking.AccountsTest do
   test "validate_and_withdraw/2 with valid amount" do
     user = user_fixture(@user_attrs)
     assert {:ok, %{balance: new_balance}} = Accounts.validate_and_withdraw(user, "100.00")
-    assert new_balance === 900_00
+    assert new_balance === 90_000
   end
 
   test "validate_and_withdraw/2 with valid amount (decimal)" do
     user = user_fixture(@user_attrs)
     assert {:ok, %{balance: new_balance}} = Accounts.validate_and_withdraw(user, "147.37")
-    assert new_balance === 852_63
+    assert new_balance === 85_263
   end
 
   describe "validates_and_transfers/3 with invalid arguments" do
