@@ -31,7 +31,7 @@ config :banking, BankingWeb.Guardian,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :pre_commit, commands: ["test"], verbose: true
+config :pre_commit, commands: ["test", "credo"], verbose: true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
