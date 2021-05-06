@@ -73,11 +73,11 @@ defmodule Banking.Accounts do
 
   defp get_account(user_id), do: Repo.get_by!(Account, user_id: user_id)
 
-  defp same_user?(current_user, target_user) when current_user.email !== target_user.email do
+  defp same_user?(current_user, target_user) when current_user.email != target_user.email do
     {:ok, target_user}
   end
 
-  defp same_user?(current_user, target_user) when current_user.email === target_user.email do
+  defp same_user?(current_user, target_user) when current_user.email == target_user.email do
     {:error, :invalid_target}
   end
 

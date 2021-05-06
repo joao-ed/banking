@@ -16,9 +16,9 @@ defmodule Banking.UsersTest do
   describe "register/1" do
     test "checks if the user has successfully registered" do
       {:ok, %User{} = user} = Users.register(@valid_attrs)
-      assert user.email === @valid_attrs.email
-      assert user.username === @valid_attrs.username
-      assert {:ok, user} === Argon2.check_pass(user, @valid_attrs.password)
+      assert user.email == @valid_attrs.email
+      assert user.username == @valid_attrs.username
+      assert {:ok, user} == Argon2.check_pass(user, @valid_attrs.password)
     end
 
     test "should fail because we provide invalid attributes" do
