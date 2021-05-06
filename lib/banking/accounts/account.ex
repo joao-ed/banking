@@ -9,8 +9,8 @@ defmodule Banking.Accounts.Account do
   @initial_balance 100_000
 
   schema "accounts" do
-    field(:balance, :integer, required: true, default: @initial_balance)
-    belongs_to(:user, User)
+    field :balance, :integer, required: true, default: @initial_balance
+    belongs_to :user, User
     timestamps()
   end
 

@@ -1,17 +1,13 @@
 defmodule Banking.Repo.Migrations.AddUsersTable do
   use Ecto.Migration
 
-  def up do
+  def change do
     create table(:users) do
       add :username, :string
       add :password, :string
       add :email, :string
       timestamps()
     end
-    create(unique_index(:users, [:email, :username]))
-  end
-
-  def down do
-    drop table(:users)
+    create unique_index :users, [:email, :username]
   end
 end
