@@ -11,7 +11,8 @@ defmodule Banking.Users.User do
 
   schema "users" do
     field :email, :string, unique: true
-    field :password, :string
+    field :password, :string, virtual: true
+    field :password_hash, :string
     field :username, :string
 
     has_one :account, Account

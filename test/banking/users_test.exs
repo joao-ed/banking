@@ -9,7 +9,8 @@ defmodule Banking.UsersTest do
 
   def user_fixture(user_attrs) do
     {:ok, user} = Users.register(user_attrs)
-    user
+    # find a way to ignore virtual fields
+    %{user | password: nil}
   end
 
   describe "register/1" do
@@ -17,7 +18,7 @@ defmodule Banking.UsersTest do
       {:ok, %User{} = user} = Users.register(@valid_attrs)
       assert user.email === @valid_attrs.email
       assert user.username === @valid_attrs.username
-      assert {:ok, user} === Argon2.check_pass(user, @valid_attrs.password, hash_key: :password)
+      assert {:ok, user} === Argon2.check_pass(user, @valid_attrs.password)
     end
 
     test "should fail because we provide invalid attributes" do

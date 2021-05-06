@@ -39,7 +39,11 @@ defmodule Banking.Users do
   defp hash_password(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
-        Changeset.put_change(changeset, :password, Encryption.put_pass_hash(pass).password)
+        Changeset.put_change(
+          changeset,
+          :password_hash,
+          Encryption.put_pass_hash(pass).password_hash
+        )
 
       _ ->
         changeset
