@@ -31,7 +31,9 @@ defmodule Banking.Users do
   Find an user and check if the password is correct
   """
   def find_user_and_check_password(%{"email" => email, "password" => password}) do
-    Repo.get_by(User, email: String.downcase(email)) |> check_password(password)
+    Repo.get_by(User, email: String.downcase(email))
+    |> Repo.preload(:account)
+    |> check_password(password)
   end
 
   defp hash_password(changeset) do
