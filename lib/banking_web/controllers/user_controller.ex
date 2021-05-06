@@ -14,7 +14,7 @@ defmodule BankingWeb.UserController do
 
       {:error, changeset} ->
         conn
-        |> put_status(:bad_request)
+        |> put_status(:unprocessable_entity)
         |> put_view(BankingWeb.ChangesetView)
         |> render("error.json", changeset: changeset)
     end
