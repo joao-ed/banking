@@ -4,14 +4,13 @@ defmodule Banking.UsersTest do
   alias Banking.Users
   alias Banking.Users.User
 
+  import Banking.Factory
+
   @valid_attrs %{username: "Rob Halford", email: "rob@fakemail.com", password: "12345678"}
   @invalid_attrs %{username: nil, email: nil, password: "1"}
 
-  def user_fixture(user_attrs) do
-    {:ok, user} = Users.register(user_attrs)
-    # find a way to ignore virtual fields
-    %{user | password: nil}
-  end
+  defp user_factory(%{user_attrs: user_attrs}),
+    do: {:ok, user: %{insert!(:user_with_account, user_attrs) | password: nil}}
 
   describe "register/1" do
     test "checks if the user has successfully registered" do
@@ -27,9 +26,11 @@ defmodule Banking.UsersTest do
   end
 
   describe "find_user_and_check_password/1" do
-    test "finds a specific user by email and password and checks if password is correct" do
-      user = user_fixture(@valid_attrs)
+    setup :user_factory
 
+    @tag user_attrs: @valid_attrs
+    test "finds a specific user by email and password and checks if password is correct",
+         %{user: user} do
       assert {:ok, ^user} =
                Users.find_user_and_check_password(%{
                  "email" => @valid_attrs.email,
@@ -37,9 +38,8 @@ defmodule Banking.UsersTest do
                })
     end
 
-    test "finds a specific user providing an email written with uppercase" do
-      user = user_fixture(%{@valid_attrs | email: "fake@fakemail.com"})
-
+    @tag user_attrs: %{@valid_attrs | email: "fake@fakemail.com"}
+    test "finds a specific user providing an email written with uppercase", %{user: user} do
       assert {:ok, ^user} =
                Users.find_user_and_check_password(%{
                  "email" => "FAKE@FAKEMAIL.COM",
@@ -47,9 +47,8 @@ defmodule Banking.UsersTest do
                })
     end
 
+    @tag user_attrs: @valid_attrs
     test "should fail because email is wrong" do
-      _ = user_fixture(@valid_attrs)
-
       assert {:error, :user_not_found} =
                Users.find_user_and_check_password(%{
                  "email" => "john@test.com",
@@ -57,9 +56,8 @@ defmodule Banking.UsersTest do
                })
     end
 
+    @tag user_attrs: @valid_attrs
     test "should fail because password is wrong" do
-      _ = user_fixture(@valid_attrs)
-
       assert {:error, "invalid password"} =
                Users.find_user_and_check_password(%{
                  "email" => @valid_attrs.email,
