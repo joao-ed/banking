@@ -1,99 +1,62 @@
 defmodule Banking.AccountsTest do
   use Banking.DataCase, async: true
 
-  alias Banking.{Accounts, Users}
+  alias Banking.Accounts
   alias Banking.Accounts.Account
 
-  @user_attrs %{
-    username: "ldriss, The Strong",
-    email: "idriss@fakemail.com",
-    password: "12345678"
-  }
+  import Banking.Factory
+
   @target_user_attrs %{
     username: "Gidras, The Tyrant",
     email: "gidras@fakemail.com",
     password: "@4534J76a"
   }
 
-  def user_fixture(user_attrs) do
-    {:ok, user} = Users.register(user_attrs)
-    user
-  end
+  defp user_factory(%{user_attrs: user_attrs}),
+    do: {:ok, user: insert!(:user_with_account, user_attrs)}
 
-  describe "validate_and_withdraw/2 with invalid amount" do
-    test "(zero as binary)" do
-      user = user_fixture(@user_attrs)
-      assert {:error, :invalid_amount} = Accounts.validate_and_withdraw(user, "0")
-    end
+  defp user_factory(_context), do: {:ok, user: insert!(:user_with_account)}
 
-    test "(zero as integer)" do
-      user = user_fixture(@user_attrs)
-      assert {:error, :invalid_amount} = Accounts.validate_and_withdraw(user, 0)
-    end
+  describe "finds_account_and_withdraw/2" do
+    setup :user_factory
 
-    test "(negative amount)" do
-      user = user_fixture(@user_attrs)
-      assert {:error, :invalid_amount} = Accounts.validate_and_withdraw(user, "-110.23")
-    end
-
-    test "(insufficient funds)" do
-      user = user_fixture(@user_attrs)
-      {:error, changeset} = Accounts.validate_and_withdraw(user, "1000.02")
+    test "should fail because account has insufficient funds", %{user: user} do
+      {:error, changeset} = Accounts.finds_account_and_withdraw(user, 1000_01)
       assert %{balance: ["Insufficient funds to perform this operation"]} = errors_on(changeset)
     end
-  end
 
-  test "validate_and_withdraw/2 with valid amount" do
-    user = user_fixture(@user_attrs)
-    assert {:ok, %{balance: new_balance}} = Accounts.validate_and_withdraw(user, "100.00")
-    assert new_balance == 90_000
-  end
-
-  test "validate_and_withdraw/2 with valid amount (decimal)" do
-    user = user_fixture(@user_attrs)
-    assert {:ok, %{balance: new_balance}} = Accounts.validate_and_withdraw(user, "147.37")
-    assert new_balance == 85_263
-  end
-
-  describe "validates_and_transfers/3 with invalid arguments" do
-    test "(negative amount)" do
-      user = user_fixture(@user_attrs)
-      target_user = user_fixture(@target_user_attrs)
-
-      assert {:error, :invalid_amount} =
-               Accounts.validates_and_transfers(user, target_user.email, "-13.45")
+    test "withdraw money from user account", %{user: user} do
+      {:ok, %{balance: balance}} = Accounts.finds_account_and_withdraw(user, 15_053)
+      assert balance == 84_947
     end
+  end
 
-    test "(insufficent funds)" do
-      user = user_fixture(@user_attrs)
-      target_user = user_fixture(@target_user_attrs)
-      {:error, changeset} = Accounts.validates_and_transfers(user, target_user.email, "1000.01")
+  describe "validates_and_transfers/3" do
+    setup :user_factory
+
+    test "should fail because account has insufficient funds", %{user: user} do
+      %{email: target_email} = insert!(:user_with_account, @target_user_attrs)
+      {:error, changeset} = Accounts.validates_and_transfers(user, target_email, 1000_01)
 
       assert %{balance: ["Insufficient funds to perform this operation"]} = errors_on(changeset)
     end
 
-    test "(target refers to same user)" do
-      user = user_fixture(@user_attrs)
-
-      assert {:error, :invalid_target} =
-               Accounts.validates_and_transfers(user, user.email, "10.00")
-    end
-
-    test "(target not found)" do
-      user = user_fixture(@user_attrs)
-
+    test "should fail because target account does not exists", %{user: user} do
       assert {:error, :target_not_found} =
-               Accounts.validates_and_transfers(user, "foo@fakemail.com", "1.00")
+               Accounts.validates_and_transfers(user, "foo@fakemail.com", 100)
     end
-  end
 
-  test "validates_and_transfers/3 with valid arguments" do
-    user = user_fixture(@user_attrs)
-    target_user = user_fixture(@target_user_attrs)
+    test "should fail because target account refers to same account", %{user: user} do
+      assert {:error, :invalid_target} = Accounts.validates_and_transfers(user, user.email, 10_00)
+    end
 
-    assert {:ok, %Account{balance: balance_after_operation}} =
-             Accounts.validates_and_transfers(user, target_user.email, "956.00")
+    test "should transfer amount to another account", %{user: user} do
+      %{email: target_email} = insert!(:user_with_account, @target_user_attrs)
 
-    assert balance_after_operation == 44_00
+      {:ok, %Account{balance: balance_after_operation}} =
+        Accounts.validates_and_transfers(user, target_email, 95_600)
+
+      assert balance_after_operation == 44_00
+    end
   end
 end

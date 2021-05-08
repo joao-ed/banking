@@ -7,30 +7,23 @@ defmodule Banking.Accounts do
   alias Banking.Users.User
 
   @doc """
-  Validate amount and withdraw money from user account
+  Finds user account and withdraw money
   """
-  def validate_and_withdraw(user, amount) do
-    case convert_amount(amount) do
-      {:ok, value} ->
-        Account
-        |> Repo.get_by(user_id: user.id)
-        |> withdraw(value)
-
-      {:error, reason} ->
-        {:error, reason}
-    end
+  def finds_account_and_withdraw(%{id: user_id}, amount) do
+    Account
+    |> Repo.get_by(user_id: user_id)
+    |> withdraw(amount)
   end
 
   @doc """
   Validates target and amount, also transfers an amount to another account
   """
   def validates_and_transfers(user, target, amount) do
-    with {:ok, value} <- convert_amount(amount),
-         {:ok, target_user} <- {:ok, get_user_by_email(target)},
+    with {:ok, target_user} <- {:ok, get_user_by_email(target)},
          {:ok, target_user} <- same_user?(user, target_user),
          {:ok, from} <- {:ok, get_account(user.id)},
          {:ok, to} <- {:ok, get_account(target_user.id)} do
-      transfer(from, to, value)
+      transfer(from, to, amount)
     end
   end
 
@@ -49,21 +42,6 @@ defmodule Banking.Accounts do
     |> Account.changeset(%{balance: account.balance - amount})
     |> Repo.update()
   end
-
-  defp convert_amount(amount) when is_binary(amount) do
-    case Decimal.parse(amount) do
-      {%Decimal{exp: -2, sign: 1} = decimal, ""} ->
-        {:ok, decimal |> Decimal.mult(100) |> Decimal.to_integer()}
-
-      _ ->
-        {:error, :invalid_amount}
-    end
-  end
-
-  defp convert_amount(amount) when is_integer(amount) and amount > 0, do: {:ok, amount}
-
-  defp convert_amount(amount) when is_integer(amount) and amount <= 0,
-    do: {:error, :invalid_amount}
 
   defp get_user_by_email(email) do
     User
