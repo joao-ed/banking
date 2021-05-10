@@ -1,8 +1,6 @@
 defmodule BankingWeb.UserControllerTest do
   use BankingWeb.ConnCase
 
-  import Banking.Factory
-
   @user_attrs %{email: "foo@fakemail.com", username: "john", password: "12345678"}
   @invalid_user_attrs %{email: nil, username: nil, password: "1"}
 
