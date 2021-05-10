@@ -21,7 +21,7 @@ defmodule BankingWeb.UserControllerTest do
       assert balance == 1000_00
     end
 
-    test "should fail because email is empty", %{conn: conn} do
+    test "should fail because data is invalid", %{conn: conn} do
       conn = post(conn, Routes.user_path(conn, :create), @invalid_user_attrs)
       assert json_response(conn, 422)
     end
