@@ -8,7 +8,7 @@ defmodule BankingWeb.SessionController do
     with {:ok, user} <- Users.find_user_and_check_password(params),
          {:ok, jwt, _full_claims} <- user |> BankingWeb.Guardian.encode_and_sign(%{}) do
       conn
-      |> put_status(:created)
+      |> put_status(:ok)
       |> render("login.json", jwt: jwt)
     else
       {:error, :user_not_found} ->
